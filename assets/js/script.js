@@ -76,7 +76,6 @@ var startQuiz = function() {
     const deleteStart = document.getElementById('start');
     deleteStart.remove();
     quizElAdder();
-    questionCounter++;
 };
 
 var rightAnswer = function() {
@@ -97,19 +96,19 @@ var taskButtonHandler = function(event) {
     var targetEl = event.target;
     if  (targetEl.className === 'buttonStart') { 
         startQuiz()
-    } else if (((questionCounter === 0) && (targetEl.className === 'buttonA')) || 
-        (questionCounter === 1 && targetEl.className === 'buttonC') || 
-        (questionCounter === 2 && targetEl.className === 'buttonC') || 
-        (questionCounter === 3 && targetEl.className === 'buttonB') || 
-        (questionCounter === 4 && targetEl.className === 'buttonD') || 
-        (questionCounter === 5 && targetEl.className === 'buttonA') || 
-        (questionCounter === 6 && targetEl.className === 'buttonC') || 
-        (questionCounter === 7 && targetEl.className === 'buttonA') || 
-        (questionCounter === 8 && targetEl.className === 'buttonA') || 
-        (questionCounter === 9 && targetEl.className === 'buttonA')) {
-        rightAnswer()
+    } else if ((questionCounter === 0 && targetEl.classList.contains('buttonA')) || 
+        (questionCounter === 1 && targetEl.classList.contains('buttonC')) || 
+        (questionCounter === 2 && targetEl.classList.contains('buttonC')) || 
+        (questionCounter === 3 && targetEl.classList.contains('buttonB')) || 
+        (questionCounter === 4 && targetEl.classList.contains('buttonD')) || 
+        (questionCounter === 5 && targetEl.classList.contains('buttonA')) || 
+        (questionCounter === 6 && targetEl.classList.contains('buttonC')) || 
+        (questionCounter === 7 && targetEl.classList.contains('buttonA')) || 
+        (questionCounter === 8 && targetEl.classList.contains('buttonA')) || 
+        (questionCounter === 9 && targetEl.classList.contains('buttonA'))) {
+        rightAnswer();
     } else {
-        wrongAnswer()
+        wrongAnswer();
     }
 };
 
