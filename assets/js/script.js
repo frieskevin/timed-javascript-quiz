@@ -1,7 +1,9 @@
 var main = document.querySelector('#main');
+var questionContent = document.querySelector('#questionContent')
+var rorH1 = document.querySelector('#rightOrWrong');
 let questionCounter = 0;
 
-// answer key 1-A, 2-C, 3-C, 4-B, 5-D, 6-A, 7-C, 8-A, 9-A, 10-A
+// answer key 0-A, 1-C, 2-C, 3-B, 4-D, 5-A, 6-C, 7-A, 8-A, 9-A
 
 const questionsObj = {
     question: [
@@ -18,16 +20,31 @@ const questionsObj = {
     answerA: ['Object-Oriented', 'var', 'getElementbyId', 'Throws an error', 'document.write', 'const', 'Boolean', 'stringify', 'clearInterval', 'Object Serialization'],
     answerB: ['Object-Based', 'let', 'getElementsByClassName', 'Ignores the statements', 'console.log', 'var', 'Undefined', 'parse', 'clearTimer', 'Object Encapsulation'],
     answerC: ['Procedural', 'Both A and B', 'Both A and B', 'Gives a warning', 'window.alert', 'let', 'Object', 'convert', 'intervalOver', 'Object Inheritance'],
-    answerD: ['None of the above', 'None of the above', 'None of the above', 'None of the above', 'All of the above', 'constant', 'Integer', 'None of the above', 'None of the Above', 'None of the above']
+    answerD: ['None of the above', 'None of the above', 'None of the above', 'None of the above', 'All of the above', 'constant', 'Integer', 'None of the above', 'None of the Above', 'None of the above'],
+    answers: ['A', 'C', 'C', 'B', 'D', 'A', 'C', 'A', 'A', 'A']
 };
 
 var answerChecker = function() {
     
 }
 
-var startQuiz = function() {
-    const deleteStart = document.getElementById('start');
-    deleteStart.remove();
+var cleanUp = function() {
+     let questionEl = document.querySelector('.questionText');
+     let buttonA = document.querySelector('.buttonA');
+     let buttonB = document.querySelector('.buttonB');
+     let buttonC = document.querySelector('.buttonC');
+     let buttonD = document.querySelector('.buttonD');
+    questionEl.remove();
+    buttonA.remove();
+    buttonB.remove();
+    buttonC.remove();
+    buttonD.remove();
+}
+
+var quizElAdder = function() {
+    if (questionCounter > 0) {
+        cleanUp();
+    };
     let questionEl = document.createElement('h1');
     questionEl.className = 'questionText'
     questionEl.textContent = questionsObj.question[questionCounter];
@@ -37,41 +54,61 @@ var startQuiz = function() {
     buttonA.textContent = 'A. ' + questionsObj.answerA[questionCounter];
 
     let buttonB = document.createElement('button');
-    buttonB.className = 'button buttonA'
+    buttonB.className = 'button buttonB'
     buttonB.textContent = 'B. ' + questionsObj.answerB[questionCounter];
 
     let buttonC = document.createElement('button');
-    buttonC.className = 'button buttonA'
+    buttonC.className = 'button buttonC'
     buttonC.textContent = 'C. ' + questionsObj.answerC[questionCounter];
 
     let buttonD = document.createElement('button');
-    buttonD.className = 'button buttonA'
+    buttonD.className = 'button buttonD'
     buttonD.textContent = 'D. ' + questionsObj.answerD[questionCounter];
 
-    main.appendChild(questionEl);
-    main.appendChild(buttonA);
-    main.appendChild(buttonB);
-    main.appendChild(buttonC);
-    main.appendChild(buttonD);
+    questionContent.appendChild(questionEl);
+    questionContent.appendChild(buttonA);
+    questionContent.appendChild(buttonB);
+    questionContent.appendChild(buttonC);
+    questionContent.appendChild(buttonD);
+};
+
+var startQuiz = function() {
+    const deleteStart = document.getElementById('start');
+    deleteStart.remove();
+    quizElAdder();
     questionCounter++;
-    console.log('snake');
 };
 
 var rightAnswer = function() {
-
+    questionCounter++;
+    quizElAdder();
+    rorH1.textContent = 'Correct!';
+    console.log('right');
 };
 
 var wrongAnswer = function() {
-
+    questionCounter++;
+    quizElAdder();
+    rorH1.textContent = 'Incorrect!';
+    console.log('wrong');
 };
 
 var taskButtonHandler = function(event) {
     var targetEl = event.target;
-    if  (targetEl.className === 'button') { 
+    if  (targetEl.className === 'buttonStart') { 
         startQuiz()
-    } else if (targetEl.className === 'correct') {
+    } else if (((questionCounter === 0) && (targetEl.className === 'buttonA')) || 
+        (questionCounter === 1 && targetEl.className === 'buttonC') || 
+        (questionCounter === 2 && targetEl.className === 'buttonC') || 
+        (questionCounter === 3 && targetEl.className === 'buttonB') || 
+        (questionCounter === 4 && targetEl.className === 'buttonD') || 
+        (questionCounter === 5 && targetEl.className === 'buttonA') || 
+        (questionCounter === 6 && targetEl.className === 'buttonC') || 
+        (questionCounter === 7 && targetEl.className === 'buttonA') || 
+        (questionCounter === 8 && targetEl.className === 'buttonA') || 
+        (questionCounter === 9 && targetEl.className === 'buttonA')) {
         rightAnswer()
-    } else if (targetEl.className === 'incorrect') {
+    } else {
         wrongAnswer()
     }
 };
