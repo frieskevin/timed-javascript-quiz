@@ -169,17 +169,17 @@ var highScores = function() {
     console.log(scoreArray)
     localStorage.setItem('highScores', JSON.stringify(scoreArray));
 
-    let scoreList = document.createElement('ul');
-    let score1 = document.createElement('li');
-    let score2 = document.createElement('li');
-    let score3 = document.createElement('li');
-    let score4 = document.createElement('li');
-    let score5 = document.createElement('li');
-    let score6 = document.createElement('li');
-    let score7 = document.createElement('li');
-    let score8 = document.createElement('li');
-    let score9 = document.createElement('li');
-    let score10 = document.createElement('li');
+    let score1 = document.createElement('h2');
+    let score2 = document.createElement('h2');
+    let score3 = document.createElement('h2');
+    let score4 = document.createElement('h2');
+    let score5 = document.createElement('h2');
+    let score6 = document.createElement('h2');
+    let score7 = document.createElement('h2');
+    let score8 = document.createElement('h2');
+    let score9 = document.createElement('h2');
+    let score10 = document.createElement('h2');
+
     score1.className = 'list';
     score2.className = 'list';
     score3.className = 'list';
@@ -190,27 +190,33 @@ var highScores = function() {
     score8.className = 'list';
     score9.className = 'list';
     score10.className = 'list';
+
     score1.textContent = scoreArray[0];
-    score1.textContent = scoreArray[1];
-    score1.textContent = scoreArray[2];
-    score1.textContent = scoreArray[3];
-    score1.textContent = scoreArray[4];
-    score1.textContent = scoreArray[5];
-    score1.textContent = scoreArray[6];
-    score1.textContent = scoreArray[7];
-    score1.textContent = scoreArray[8];
-    score1.textContent = scoreArray[9];
-    questionContent.appendChild(scoreList);
-    scoreList.appendChild(score1);
-    scoreList.appendChild(score2);
-    scoreList.appendChild(score3);
-    scoreList.appendChild(score4);
-    scoreList.appendChild(score5);
-    scoreList.appendChild(score6);
-    scoreList.appendChild(score7);
-    scoreList.appendChild(score8);
-    scoreList.appendChild(score9);
-    scoreList.appendChild(score10);
+    score2.textContent = scoreArray[1];
+    score3.textContent = scoreArray[2];
+    score4.textContent = scoreArray[3];
+    score5.textContent = scoreArray[4];
+    score6.textContent = scoreArray[5];
+    score7.textContent = scoreArray[6];
+    score8.textContent = scoreArray[7];
+    score9.textContent = scoreArray[8];
+    score10.textContent = scoreArray[9];
+    
+    questionContent.appendChild(score1);
+    questionContent.appendChild(score2);
+    questionContent.appendChild(score3);
+    questionContent.appendChild(score4);
+    questionContent.appendChild(score5);
+    questionContent.appendChild(score6);
+    questionContent.appendChild(score7);
+    questionContent.appendChild(score8);
+    questionContent.appendChild(score9);
+    questionContent.appendChild(score10);
+
+    let clearButt = document.createElement('button');
+    clearButt.className = 'button buttonClear';
+    clearButt.textContent = 'Clear High Scores';
+    questionContent.appendChild(clearButt);
 }
 
 var taskButtonHandler = function(event) {
@@ -241,6 +247,8 @@ var taskButtonHandler = function(event) {
     // if wrong answer button is clicked goes to wrongAnswer function
     } else if (targetEl.classList.contains('buttonSub')) {
         highScores();
+    } else if (targetEl.classList.contains('buttonClear')) {
+        localStorage.clear();
     } else if (targetEl.classList.contains('button')) {
         wrongAnswer();
     } 
