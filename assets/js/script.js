@@ -9,8 +9,7 @@ var scoreArrRaw = localStorage.getItem('highScores');
 var scoreArray = JSON.parse(scoreArrRaw);
 scoreArray = scoreArray || [];
 
-// answer key 0-A, 1-C, 2-C, 3-B, 4-D, 5-A, 6-C, 7-A, 8-A, 9-A
-
+//object of questions and answers
 const questionsObj = {
     question: [
         'JavaScript is an ______ language.',
@@ -27,9 +26,11 @@ const questionsObj = {
     answerB: ['Object-Based', 'let', 'getElementsByClassName', 'Ignores the statements', 'console.log', 'var', 'Undefined', 'parse', 'clearTimer', 'Object Encapsulation'],
     answerC: ['Procedural', 'Both A and B', 'Both A and B', 'Gives a warning', 'window.alert', 'let', 'Object', 'convert', 'intervalOver', 'Object Inheritance'],
     answerD: ['None of the above', 'None of the above', 'None of the above', 'None of the above', 'All of the above', 'constant', 'Integer', 'None of the above', 'None of the Above', 'None of the above'],
-    answers: ['A', 'C', 'C', 'B', 'D', 'A', 'C', 'A', 'A', 'A']
 };
 
+//function deletes question and answer buttons, sets their score to the time left
+//displays the score they got
+//lets them input their name for the high score list
 var gameOver = function() {
     cleanUp();
     score = timeLeft;
@@ -57,6 +58,7 @@ var gameOver = function() {
     questionContent.appendChild(buttonSub);
 };
 
+//starts the timer for the quiz and ends the quiz if timer reaches zero without player getting a score
 var timerStart = function() {
     var timer = setInterval(function() {
         if (timeLeft > 1) {
@@ -76,6 +78,7 @@ var timerStart = function() {
     }, 1000);
 }
 
+// deletes the question and answer buttons
 var cleanUp = function() {
         let questionNumber = document.querySelector('.questionNum');
         let questionEl = document.querySelector('.questionText');
@@ -83,16 +86,18 @@ var cleanUp = function() {
         let buttonB = document.querySelector('.buttonB');
         let buttonC = document.querySelector('.buttonC');
         let buttonD = document.querySelector('.buttonD');
-        if (buttonC.classList.contains('button')) {
+        // runs only if the question answer buttons are on the page still
+    if (buttonC.classList.contains('button')) {
         questionNumber.remove();
         questionEl.remove();
         buttonA.remove();
         buttonB.remove();
         buttonC.remove();
         buttonD.remove();
-        }
+    }
 };
 
+// adds the questions and answers to the page from the question and answer object
 var quizElAdder = function () {
     if (questionCounter < 10) {
         let questionNumber = document.createElement('h1');
@@ -130,13 +135,13 @@ var quizElAdder = function () {
         };
     };
 };
-
+//starts the quiz and deletes start button
 var startQuiz = function() {
     const deleteStart = document.getElementById('start');
     deleteStart.remove();
     quizElAdder();
 };
-
+//deletes old question and progresses to next question
 var rightAnswer = function() {
     cleanUp();
     questionCounter++;
@@ -144,7 +149,7 @@ var rightAnswer = function() {
     rorH1.textContent = 'Correct!';
     console.log('right');
 };
-
+//deletes old question and progresses to next question
 var wrongAnswer = function() {
     cleanUp();
     questionCounter++;
@@ -153,7 +158,8 @@ var wrongAnswer = function() {
     console.log('wrong');
     timeLeft = timeLeft - 10;
 };
-
+// adds high score and name to local storage score array and
+// displays high scores and shows button to clear local storage of high scores
 var highScores = function() {
     let inputEl = document.querySelector('#initialInput');
     let inputLabel = document.querySelector('.inputLabel');
@@ -218,7 +224,7 @@ var highScores = function() {
     clearButt.textContent = 'Clear High Scores';
     questionContent.appendChild(clearButt);
 }
-
+// does things on button presses
 var taskButtonHandler = function(event) {
     var targetEl = event.target;
     if  (targetEl.classList.contains('buttonStart')) { 
@@ -247,8 +253,10 @@ var taskButtonHandler = function(event) {
     // if wrong answer button is clicked goes to wrongAnswer function
     } else if (targetEl.classList.contains('buttonSub')) {
         highScores();
+    // clears high scores from local storage
     } else if (targetEl.classList.contains('buttonClear')) {
         localStorage.clear();
+    // if nothing else then the answer is wrong
     } else if (targetEl.classList.contains('button')) {
         wrongAnswer();
     } 
