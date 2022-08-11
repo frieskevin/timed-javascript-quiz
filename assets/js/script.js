@@ -2,6 +2,9 @@ var main = document.querySelector('#main');
 var questionContent = document.querySelector('#questionContent')
 var rorH1 = document.querySelector('#rightOrWrong');
 let questionCounter = 0;
+var timerEl = document.getElementById('timer');
+var timeLeft = 80
+var score = 0
 
 // answer key 0-A, 1-C, 2-C, 3-B, 4-D, 5-A, 6-C, 7-A, 8-A, 9-A
 
@@ -24,52 +27,107 @@ const questionsObj = {
     answers: ['A', 'C', 'C', 'B', 'D', 'A', 'C', 'A', 'A', 'A']
 };
 
-var answerChecker = function() {
-    
+var gameOver = function() {
+    cleanUp();
+    score = timeLeft;
+    let scoreDisplay = document.createElement('h1');
+    let inputLabel = document.createElement('label');
+    inputLabel.htmlFor = 'initialInput';
+    inputLabel.textContent = 'Enter Initials:'
+
+    let initialInput = document.createElement('input');
+    initialInput.id = 'initialInput';
+    initialInput.className = 'initialInput';
+
+    let buttonSub = document.createElement('button');
+    buttonSub.className = 'button buttonSub';
+    buttonSub.textContent = 'Submit';
+
+    timerEl.remove();
+    rorH1.remove();
+    scoreDisplay.textContent = 'Your score is ' + score;
+
+    questionContent.appendChild(scoreDisplay);
+    questionContent.appendChild(inputLabel);
+    questionContent.appendChild(initialInput);
+    questionContent.appendChild(buttonSub);
+
+    localStorage.setItem('highScore', JSON.stringify())
+};
+
+var timerStart = function() {
+    var timer = setInterval(function() {
+        if (timeLeft > 1) {
+            timerEl.textContent = timeLeft + ' seconds remaining';
+            timeLeft--;
+        } else if (timeLeft === 1) {
+            timerEl.textContent = timeLeft + ' second remaining';
+            timeLeft--;
+        } else if (timeLeft < 1 && score > 0) {
+            timerEl.textContent = '';
+            clearInterval(timer);
+        } else {
+            timerEl.textContent = '';
+            clearInterval(timer);
+            cleanUp();
+            gameOver();
+        }
+    }, 1000);
 }
 
 var cleanUp = function() {
-     let questionEl = document.querySelector('.questionText');
-     let buttonA = document.querySelector('.buttonA');
-     let buttonB = document.querySelector('.buttonB');
-     let buttonC = document.querySelector('.buttonC');
-     let buttonD = document.querySelector('.buttonD');
-    questionEl.remove();
-    buttonA.remove();
-    buttonB.remove();
-    buttonC.remove();
-    buttonD.remove();
-}
+        let questionNumber = document.querySelector('.questionNum');
+        let questionEl = document.querySelector('.questionText');
+        let buttonA = document.querySelector('.buttonA');
+        let buttonB = document.querySelector('.buttonB');
+        let buttonC = document.querySelector('.buttonC');
+        let buttonD = document.querySelector('.buttonD');
+        if (buttonC.classList.contains('button')) {
+        questionNumber.remove();
+        questionEl.remove();
+        buttonA.remove();
+        buttonB.remove();
+        buttonC.remove();
+        buttonD.remove();
+        }
+};
 
-var quizElAdder = function() {
-    if (questionCounter > 0) {
-        cleanUp();
+var quizElAdder = function () {
+    if (questionCounter < 10) {
+        let questionNumber = document.createElement('h1');
+        questionNumber.className = 'questionNum'
+        questionNumber.textContent = 'Question ' + (questionCounter + 1) + ' out of 10.';
+
+        let questionEl = document.createElement('h1');
+        questionEl.className = 'questionText'
+        questionEl.textContent = questionsObj.question[questionCounter];
+
+        let buttonA = document.createElement('button');
+        buttonA.className = 'button buttonA'
+        buttonA.textContent = 'A. ' + questionsObj.answerA[questionCounter];
+
+        let buttonB = document.createElement('button');
+        buttonB.className = 'button buttonB'
+        buttonB.textContent = 'B. ' + questionsObj.answerB[questionCounter];
+
+        let buttonC = document.createElement('button');
+        buttonC.className = 'button buttonC'
+        buttonC.textContent = 'C. ' + questionsObj.answerC[questionCounter];
+
+        let buttonD = document.createElement('button');
+        buttonD.className = 'button buttonD'
+        buttonD.textContent = 'D. ' + questionsObj.answerD[questionCounter];
+
+        questionContent.appendChild(questionNumber);
+        questionContent.appendChild(questionEl);
+        questionContent.appendChild(buttonA);
+        questionContent.appendChild(buttonB);
+        questionContent.appendChild(buttonC);
+        questionContent.appendChild(buttonD);
+        if (questionCounter === 9) {
+            questionCounter++;
+        };
     };
-    let questionEl = document.createElement('h1');
-    questionEl.className = 'questionText'
-    questionEl.textContent = questionsObj.question[questionCounter];
-
-    let buttonA = document.createElement('button');
-    buttonA.className = 'button buttonA'
-    buttonA.textContent = 'A. ' + questionsObj.answerA[questionCounter];
-
-    let buttonB = document.createElement('button');
-    buttonB.className = 'button buttonB'
-    buttonB.textContent = 'B. ' + questionsObj.answerB[questionCounter];
-
-    let buttonC = document.createElement('button');
-    buttonC.className = 'button buttonC'
-    buttonC.textContent = 'C. ' + questionsObj.answerC[questionCounter];
-
-    let buttonD = document.createElement('button');
-    buttonD.className = 'button buttonD'
-    buttonD.textContent = 'D. ' + questionsObj.answerD[questionCounter];
-
-    questionContent.appendChild(questionEl);
-    questionContent.appendChild(buttonA);
-    questionContent.appendChild(buttonB);
-    questionContent.appendChild(buttonC);
-    questionContent.appendChild(buttonD);
 };
 
 var startQuiz = function() {
@@ -79,6 +137,7 @@ var startQuiz = function() {
 };
 
 var rightAnswer = function() {
+    cleanUp();
     questionCounter++;
     quizElAdder();
     rorH1.textContent = 'Correct!';
@@ -86,16 +145,26 @@ var rightAnswer = function() {
 };
 
 var wrongAnswer = function() {
+    cleanUp();
     questionCounter++;
     quizElAdder();
     rorH1.textContent = 'Incorrect!';
     console.log('wrong');
+    timeLeft = timeLeft - 10;
 };
+
+var highScores = function() {
+    let inputEl = document.querySelector('#initialInput');
+    let name = inputEl.textContent
+    let 
+}
 
 var taskButtonHandler = function(event) {
     var targetEl = event.target;
     if  (targetEl.className === 'buttonStart') { 
-        startQuiz()
+        startQuiz();
+        timerStart();
+    //check if answer is correct and goes to rightAnswer function
     } else if ((questionCounter === 0 && targetEl.classList.contains('buttonA')) || 
         (questionCounter === 1 && targetEl.classList.contains('buttonC')) || 
         (questionCounter === 2 && targetEl.classList.contains('buttonC')) || 
@@ -107,9 +176,16 @@ var taskButtonHandler = function(event) {
         (questionCounter === 8 && targetEl.classList.contains('buttonA')) || 
         (questionCounter === 9 && targetEl.classList.contains('buttonA'))) {
         rightAnswer();
-    } else {
+    //check if counter is at 10 indicating quiz is over and goes to gameOver function
+    } else if (questionCounter >= 10 && targetEl.classList.contains('button')) {
+        gameOver();
+        console.log(score);
+    // if wrong answer button is clicked goes to wrongAnswer function
+    } else if (targetEl.classList.contains('buttonSub')) {
+        highScores();
+    } else if (targetEl.classList.contains('button')) {
         wrongAnswer();
-    }
+    } 
 };
-
+// main event listener listening for clicks
 main.addEventListener('click', taskButtonHandler);
