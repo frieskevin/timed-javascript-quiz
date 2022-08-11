@@ -1,4 +1,4 @@
-#JavaScript Fundamentals Quiz
+# JavaScript Fundamentals Quiz
 
 This is a timed and scored JavaScript fundamentals quiz with a high score stored in local storage.
 
