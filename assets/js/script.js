@@ -3,8 +3,11 @@ var questionContent = document.querySelector('#questionContent')
 var rorH1 = document.querySelector('#rightOrWrong');
 let questionCounter = 0;
 var timerEl = document.getElementById('timer');
-var timeLeft = 80
-var score = 0
+var timeLeft = 80;
+var score = 0;
+var scoreArrRaw = localStorage.getItem('highScores');
+var scoreArray = JSON.parse(scoreArrRaw);
+scoreArray = scoreArray || [];
 
 // answer key 0-A, 1-C, 2-C, 3-B, 4-D, 5-A, 6-C, 7-A, 8-A, 9-A
 
@@ -32,8 +35,9 @@ var gameOver = function() {
     score = timeLeft;
     let scoreDisplay = document.createElement('h1');
     let inputLabel = document.createElement('label');
+    inputLabel.className = 'inputLabel';
     inputLabel.htmlFor = 'initialInput';
-    inputLabel.textContent = 'Enter Initials:'
+    inputLabel.textContent = 'Enter Initials:';
 
     let initialInput = document.createElement('input');
     initialInput.id = 'initialInput';
@@ -51,8 +55,6 @@ var gameOver = function() {
     questionContent.appendChild(inputLabel);
     questionContent.appendChild(initialInput);
     questionContent.appendChild(buttonSub);
-
-    localStorage.setItem('highScore', JSON.stringify())
 };
 
 var timerStart = function() {
@@ -69,7 +71,6 @@ var timerStart = function() {
         } else {
             timerEl.textContent = '';
             clearInterval(timer);
-            cleanUp();
             gameOver();
         }
     }, 1000);
@@ -155,13 +156,66 @@ var wrongAnswer = function() {
 
 var highScores = function() {
     let inputEl = document.querySelector('#initialInput');
-    let name = inputEl.textContent
-    let 
+    let inputLabel = document.querySelector('.inputLabel');
+    let buttonSub = document.querySelector('.buttonSub');
+
+    let name = inputEl.value;
+    let nameScore = (name + '  ' + score)
+
+    inputEl.remove();
+    inputLabel.remove();
+    buttonSub.remove();
+    scoreArray.push(nameScore);
+    console.log(scoreArray)
+    localStorage.setItem('highScores', JSON.stringify(scoreArray));
+
+    let scoreList = document.createElement('ul');
+    let score1 = document.createElement('li');
+    let score2 = document.createElement('li');
+    let score3 = document.createElement('li');
+    let score4 = document.createElement('li');
+    let score5 = document.createElement('li');
+    let score6 = document.createElement('li');
+    let score7 = document.createElement('li');
+    let score8 = document.createElement('li');
+    let score9 = document.createElement('li');
+    let score10 = document.createElement('li');
+    score1.className = 'list';
+    score2.className = 'list';
+    score3.className = 'list';
+    score4.className = 'list';
+    score5.className = 'list';
+    score6.className = 'list';
+    score7.className = 'list';
+    score8.className = 'list';
+    score9.className = 'list';
+    score10.className = 'list';
+    score1.textContent = scoreArray[0];
+    score1.textContent = scoreArray[1];
+    score1.textContent = scoreArray[2];
+    score1.textContent = scoreArray[3];
+    score1.textContent = scoreArray[4];
+    score1.textContent = scoreArray[5];
+    score1.textContent = scoreArray[6];
+    score1.textContent = scoreArray[7];
+    score1.textContent = scoreArray[8];
+    score1.textContent = scoreArray[9];
+    questionContent.appendChild(scoreList);
+    scoreList.appendChild(score1);
+    scoreList.appendChild(score2);
+    scoreList.appendChild(score3);
+    scoreList.appendChild(score4);
+    scoreList.appendChild(score5);
+    scoreList.appendChild(score6);
+    scoreList.appendChild(score7);
+    scoreList.appendChild(score8);
+    scoreList.appendChild(score9);
+    scoreList.appendChild(score10);
 }
 
 var taskButtonHandler = function(event) {
     var targetEl = event.target;
-    if  (targetEl.className === 'buttonStart') { 
+    if  (targetEl.classList.contains('buttonStart')) { 
         startQuiz();
         timerStart();
     //check if answer is correct and goes to rightAnswer function
@@ -177,7 +231,11 @@ var taskButtonHandler = function(event) {
         (questionCounter === 9 && targetEl.classList.contains('buttonA'))) {
         rightAnswer();
     //check if counter is at 10 indicating quiz is over and goes to gameOver function
-    } else if (questionCounter >= 10 && targetEl.classList.contains('button')) {
+    } else if (questionCounter >= 10 && 
+        ((targetEl.classList.contains('buttonA') || 
+        targetEl.classList.contains('buttonB') || 
+        targetEl.classList.contains('buttonC') || 
+        targetEl.classList.contains('buttonD')))) {
         gameOver();
         console.log(score);
     // if wrong answer button is clicked goes to wrongAnswer function
